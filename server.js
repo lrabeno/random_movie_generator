@@ -30,16 +30,18 @@ app.get('/movies/:id', async (req, res, next) => {
 app.post('/movies', async (req, res, next) => {
     try {
         const movie = await {...req.body}
-        res.send(await Movie.create({
-            name: faker.company.catchPhrase()
-        }
-    ))} 
+        res.status(201).send(await Movie.create(movie))
+    //     res.send(await Movie.create({
+    //         name: faker.company.catchPhrase()
+    //     }
+    // ))
+} 
     catch(error) {
         next (error)
     }
 })
 
-app.delete('/delete/:id', async (req, res, next) => {
+app.delete('/movies/:id', async (req, res, next) => {
     try {
         const movie = await Movie.findByPk(req.params.id)
         if (!movie) {
@@ -48,6 +50,18 @@ app.delete('/delete/:id', async (req, res, next) => {
         await movie.destroy()
         res.sendStatus(204)
         }
+    } catch (error) {
+        next (error)
+    }
+})
+
+app.put('/movies/:id',  async (req, res, next) => {
+    try {
+        const movie = await Movie.findByPk(req.params.id)
+        await movie.update(req.body)
+        await movie.save()
+        res.send(movie)
+        
     } catch (error) {
         next (error)
     }

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import faker from 'faker'
 import { connect } from "react-redux"
-import { createMovie, deleteMovie } from './store'
+import { createMovie, deleteMovie, addStar } from './store'
 
 class App extends Component {
     constructor() {
@@ -29,11 +30,11 @@ class App extends Component {
     // }
 
     render() {
-        // const { louisMovie } = this.state
+
         const { movies } = this.props.movieStore
-        const { randoMovie, byeMovie } = this.props
-        console.log("these are moviessss", movies)
-        console.log("HIIIIIII random movie", this.props.randoMovie)
+        const { randoMovie, byeMovie, addAStar } = this.props
+        console.log("these are moviessss", this.props)
+
         
         return (
             <div>
@@ -41,12 +42,22 @@ class App extends Component {
                 <div>
                 {movies.map(movie => {
                     return (
-                        <h3 key={movie.data.id}>{movie.data.name}
-                        <button onClick={()=> byeMovie(movie.data.id)}>X</button>
-                        </h3>  
+                        <div key={movie.id}>
+                        <h3 >
+                            {movie.name} 
+                        
+                        <button onClick={()=> byeMovie(movie.id)}>X</button>
+                        
+                        </h3> 
+                        <h4>rating: {movie.stars}</h4> 
+                        <button onClick={()=> addAStar(movie)}>+</button>
+                         </div>
                     )
                 })}</div>    
                 <button onClick={randoMovie}>Create Random Movie</button>
+                <div>
+
+                </div>
             </div>
         )
     }
@@ -57,10 +68,15 @@ const mapStateToProps = (state) => state
 const mapDispatchToProps = (dispatch) => {
     return {
         randoMovie: () => {
-            dispatch(createMovie())
+            const name = faker.company.catchPhrase()
+            console.log(name)
+            dispatch(createMovie(name))
         },
         byeMovie: (id) => {
             dispatch(deleteMovie(id))
+        },
+        addAStar: (movie) => {
+            dispatch(addStar(movie))
         }
     }
 }
