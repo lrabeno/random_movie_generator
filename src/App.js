@@ -2,22 +2,20 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import faker from 'faker'
 import { connect } from "react-redux"
-import { createMovie, deleteMovie, addStar } from './store'
+import Nav from './Nav'
+import Body from './Body'
+import store, { getMovies, createMovie } from './store'
 
 class App extends Component {
     constructor() {
         super()
-        // this.state = {
-        //     louisMovie: []
-        // }
+        this.state = store.getState()
     }
 
-    // async componentDidMount() {
-    //     const myMovie = (await axios.get('/movies')).data
-    //     this.setState({
-    //         louisMovie: myMovie
-    //     })
-    // }
+    async componentDidMount() {
+        this.setState({ initialState: 'There are no movies!' });
+        store.dispatch(getMovies()); // THIS IS FOR WHEN YOU REFRESH TO KEEP MOVIES ON PAGE
+      }
     
     // deletelouisMovie = async(id) => { 
     //     console.log(id)
@@ -28,36 +26,25 @@ class App extends Component {
     //     }
     //     )})
     // }
-
+    
     render() {
 
         const { movies } = this.props.movieStore
-        const { randoMovie, byeMovie, addAStar } = this.props
-        console.log("these are moviessss", this.props)
-
+        const { randoMovie } = this.props
+        const {initialState} = this.state
         
         return (
             <div>
-                <h1>Create a Movie!  {movies.length}</h1>
-                <div>
-                {movies.map(movie => {
-                    return (
-                        <div key={movie.id}>
-                        <h3 >
-                            {movie.name} 
-                        
-                        <button onClick={()=> byeMovie(movie.id)}>X</button>
-                        
-                        </h3> 
-                        <h4>rating: {movie.stars}</h4> 
-                        <button onClick={()=> addAStar(movie)}>+</button>
-                         </div>
-                    )
-                })}</div>    
-                <button onClick={randoMovie}>Create Random Movie</button>
-                <div>
+                <Nav movies={movies}/>
 
-                </div>
+                <button className="create" onClick={randoMovie}>Create Random Movie</button>
+                <h1>Movie List</h1>
+                <h2>Number Of Movies ({movies.length})</h2>
+                {movies.length === 0 ? (<h1>{initialState}</h1>)
+                : (      
+                <Body/>
+                )}
+    
             </div>
         )
     }
@@ -71,15 +58,8 @@ const mapDispatchToProps = (dispatch) => {
             const name = faker.company.catchPhrase()
             console.log(name)
             dispatch(createMovie(name))
-        },
-        byeMovie: (id) => {
-            dispatch(deleteMovie(id))
-        },
-        addAStar: (movie) => {
-            dispatch(addStar(movie))
         }
     }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

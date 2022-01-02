@@ -2,9 +2,9 @@ const express = require('express');
 const { syncAndSeed, db, Movie} = require('./db')
 const app = express();
 const path = require('path');
-const faker = require('faker')
 
 app.use('/dist', express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.json());
 
 
@@ -13,7 +13,13 @@ app.get('/', (req, res)=> res.sendFile(path.join(__dirname, './public/index.html
 
 app.get('/movies', async (req, res, next) => {
     try {
-        res.send(await Movie.findAll())
+        const movies = await Movie.findAll({
+            order: [
+                ['stars', 'DESC'],
+                ['name', 'ASC'],
+              ],
+        })
+        res.send(movies)
     } catch (error) {
         next(error)
     }
@@ -31,11 +37,7 @@ app.post('/movies', async (req, res, next) => {
     try {
         const movie = await {...req.body}
         res.status(201).send(await Movie.create(movie))
-    //     res.send(await Movie.create({
-    //         name: faker.company.catchPhrase()
-    //     }
-    // ))
-} 
+    } 
     catch(error) {
         next (error)
     }
@@ -55,10 +57,12 @@ app.delete('/movies/:id', async (req, res, next) => {
     }
 })
 
-app.put('/movies/:id',  async (req, res, next) => {
+app.put('/movies/:id',  async(req, res, next) => {
     try {
         const movie = await Movie.findByPk(req.params.id)
         await movie.update(req.body)
+        console.log('from the put route yooooo',req.body.stars)
+        console.log('REQQQQQ BODYYYYY', req.body)
         await movie.save()
         res.send(movie)
         

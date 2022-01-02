@@ -7,10 +7,23 @@ const initalState = {
     movies: []
 }
 
+const GET_MOVIES = 'GET_MOVIES'
 const ADD_MOVIE = "ADD_MOVIE"
 const DELETE_MOVIE = "DELETE_MOVIE"
 const ADD_STAR = "ADD_STAR"
+const REMOVE_STAR = "REMOVE_STAR"
 
+
+export const getMovies = () => {
+    return async (dispatch) => {
+      const movies = (await axios.get('/movies')).data;
+      dispatch({
+          type: GET_MOVIES,
+          movies: movies
+      });
+    };
+  };
+  
 
 export const createMovie = (name) => {
     return async(dispatch) => {
@@ -35,7 +48,8 @@ export const deleteMovie = (id) => {
 
 export const addStar = (movie) => {
     return async(dispatch) => {
-      await axios.put(`/movies/${movie.id}`,  movie )
+      const stuff = (await axios.put(`/movies/${movie.id}`,  movie ))
+      console.log('heres my stuff!!!',stuff)
         dispatch({
             type: ADD_STAR,
             movie: movie,
@@ -44,8 +58,22 @@ export const addStar = (movie) => {
     }
 }
 
+export const removeStar = (movie) => {
+    return async(dispatch) => {
+       await axios.put(`/movies/${movie.id}`, movie)
+      dispatch({
+          type: REMOVE_STAR,
+          movie: movie,
+          id: movie.id
+      })
+    }
+} 
+
 
 const movieStore = ((state = initalState, action) => {
+    if (action.type === GET_MOVIES) {
+        return {movies: action.movies}
+    }
     if (action.type === ADD_MOVIE) {
         return {...state, movies: [...state.movies, action.movie]}
     }
@@ -55,7 +83,7 @@ const movieStore = ((state = initalState, action) => {
         })]}
     }
     if (action.type === ADD_STAR) {
-        return {...state, ...state.movies.map((movie)=> {
+        return {...state, movies: [...state.movies.map((movie)=> {
             if (movie.id === action.id) {
                 movie.stars++
                 return movie
@@ -64,7 +92,19 @@ const movieStore = ((state = initalState, action) => {
                 return movie
             }
         })
-        }
+        ]}
+    }
+    if (action.type === REMOVE_STAR) {
+        return {...state, movies: [...state.movies.map((movie)=> {
+            if (movie.id === action.id) {
+                movie.stars--
+                return movie
+            }
+            else {
+                return movie
+            }
+        })
+        ]}
     }
     return state
 })
