@@ -48,11 +48,15 @@ export const deleteMovie = (id) => {
 
 export const addStar = (movie) => {
     return async(dispatch) => {
-      const stuff = (await axios.put(`/movies/${movie.id}`,  movie ))
-      console.log('heres my stuff!!!',stuff)
+      const stuff = (await axios.put(`/movies/${movie.id}`,  
+        {
+          stars: movie.stars, 
+          id: movie.id
+        } )).data
         dispatch({
             type: ADD_STAR,
-            movie: movie,
+            movie: movie.id,
+            stars: movie.stars,
             id: movie.id
         })        
     }
@@ -60,10 +64,15 @@ export const addStar = (movie) => {
 
 export const removeStar = (movie) => {
     return async(dispatch) => {
-       await axios.put(`/movies/${movie.id}`, movie)
+       await axios.put(`/movies/${movie.id}`,
+       {
+        stars: movie.stars, 
+        id: movie.id
+       })
       dispatch({
           type: REMOVE_STAR,
-          movie: movie,
+          movie: movie.id,
+          stars: movie.stars,
           id: movie.id
       })
     }

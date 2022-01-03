@@ -31,7 +31,7 @@ class App extends Component {
 
         const { movies } = this.props.movieStore
         const { randoMovie } = this.props
-        const {initialState} = this.state
+        const { initialState } = this.state
         
         return (
             <div>

@@ -28,7 +28,7 @@ nav {
 }
 .remove {
     margin: .5rem;
-    height: 2rem;
+    height: auto;
     background-color: black;
     color: rgb(161, 161, 184);
     font-size: 20px;
@@ -60,18 +60,20 @@ nav {
 
 .plus {
     margin: .5rem;
-    height: 2rem;
+    height: auto;
     background-color: black;
     color: rgb(161, 161, 184);
     font-size: 20px;
+    padding: 5px;
     border-radius: 25px;
 }
 
 .minus {
     margin: .5rem;
-    height: 2rem;
+    height: auto;
     background-color: black;
     color: rgb(161, 161, 184);
     font-size: 20px;
+    padding: 5px;
     border-radius: 25px;
 }

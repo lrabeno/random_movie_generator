@@ -59,13 +59,12 @@ app.delete('/movies/:id', async (req, res, next) => {
 
 app.put('/movies/:id',  async(req, res, next) => {
     try {
-        const movie = await Movie.findByPk(req.params.id)
-        await movie.update(req.body)
         console.log('from the put route yooooo',req.body.stars)
         console.log('REQQQQQ BODYYYYY', req.body)
-        await movie.save()
+        console.log('REQ DOT PARAMSSSSS',req.params)
+        const movie = await Movie.findByPk(req.params.id)
+        await movie.update({stars: req.body.stars})
         res.send(movie)
-        
     } catch (error) {
         next (error)
     }
