@@ -9,8 +9,8 @@ const Nav = ({movies}) => {
             movies
             .map((movie)=> movie.stars)
             .reduce((accum, currVal)=> accum + currVal, 0) /
-            movies.length)
-        })</h1>
+            movies.length * 10) /10 
+        } )</h1>
         </nav>
         </div>
     )}

@@ -59,9 +59,9 @@ app.delete('/movies/:id', async (req, res, next) => {
 
 app.put('/movies/:id',  async(req, res, next) => {
     try {
-        console.log('from the put route yooooo',req.body.stars)
-        console.log('REQQQQQ BODYYYYY', req.body)
-        console.log('REQ DOT PARAMSSSSS',req.params)
+        // console.log('from the put route yooooo',req.body.stars)
+        // console.log('REQQQQQ BODYYYYY', req.body)
+        // console.log('REQ DOT PARAMSSSSS',req.params)
         const movie = await Movie.findByPk(req.params.id)
         await movie.update({stars: req.body.stars})
         res.send(movie)

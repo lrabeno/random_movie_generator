@@ -20,7 +20,7 @@ const Body = (props) => {
                         <button className="remove" onClick={()=> byeMovie(movie.id)}>Delete Movie</button>
                         </h3> 
                         <div className="rating">
-                            <h4>Star Rating: {movie.stars}</h4> 
+                            <h4>Star Rating: ({movie.stars})</h4> 
                             <button className="plus" onClick={()=> addAStar({stars: movie.stars + 1, id: movie.id})}
                             disabled={movie.rating === 5 ? true : false}
                             >Add Star</button>
